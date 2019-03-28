@@ -22,7 +22,5 @@ extension MapViewController: SearchViewControllerDelegate {
         if let destination = result as? MKMapItem {
             displayRoute(to: destination)
         }
-
-        if let station = result as? Station {}
     }
 }

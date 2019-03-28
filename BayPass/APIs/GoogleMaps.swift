@@ -20,7 +20,7 @@ class GoogleMaps {
             "departure_time": String(Int(departureTime.timeIntervalSince1970)),
             "key": Credentials().googleDirections,
         ]
-
+        let radius = CLLocation.distance(from: from, to: to)
         var results = [Route]()
         Alamofire.request("https://maps.googleapis.com/maps/api/directions/json", method: .get, parameters: params).responseJSON { response in
             if let json = response.result.value as? [String: Any],
@@ -61,6 +61,7 @@ class GoogleMaps {
     }
 
     func parseSegment(from json: [String: Any]) -> RouteSegment? {
+        let group = DispatchGroup()
         guard let distanceJson = json["distance"] as? [String: Any],
             let distance = distanceJson["value"] as? Int,
             let polylineJson = json["polyline"] as? [String: Any],
@@ -76,13 +77,21 @@ class GoogleMaps {
 
         // Transit
         if let transitDetails = json["transit_details"] as? [String: Any] {
-            var ag: Agency = Agency.zero
+            var waypoints = [Station]()
 
             guard let arrivalJson = transitDetails["arrival_time"] as? [String: Any],
                 let arrivalInterval = arrivalJson["value"] as? Int,
                 let departureJson = transitDetails["departure_time"] as? [String: Any],
                 let departureInterval = departureJson["value"] as? Int,
-                let lineJson = transitDetails["line"] as? [String: Any]
+                let lineJson = transitDetails["line"] as? [String: Any],
+                let arrivalStop = transitDetails["arrival_stop"] as? [String: Any],
+                let locationForArrival = arrivalStop["location"] as? [String: Any],
+                let latForArrival = locationForArrival["lat"] as? Double,
+                let lngForArrival = locationForArrival["lng"] as? Double,
+                let departureStop = transitDetails["departure_stop"] as? [String: Any],
+                let locationForDeparture = departureStop["location"] as? [String: Any],
+                let latForDeparture = locationForDeparture["lat"] as? Double,
+                let lngForDeparture = locationForDeparture["lng"] as? Double
             else {
                 return nil
             }
@@ -90,15 +99,35 @@ class GoogleMaps {
             let departureDate = Date(timeIntervalSince1970: Double(departureInterval))
             let arrivalDate = Date(timeIntervalSince1970: Double(arrivalInterval))
 
-            let lineName = lineJson["name"] as? String ?? ""
-            if let agencies = lineJson["agencies"] as? [String: Any] {
-                let agencyName = agencies["name"] as? String?
-                ag = Agency(rawValue: agencyName as! String) ?? Agency.zero
-            }
+            // CLLocation for Arrival
+            let latArrival: CLLocationDegrees = latForArrival
+            let longArrival: CLLocationDegrees = lngForArrival
+            let arrivalLocation = CLLocationCoordinate2D(latitude: latForArrival, longitude: longArrival)
+            let arrivalLoc = CLLocation(latitude: latForArrival, longitude: longArrival)
+
+            // CLLocation for Departure
+            let latDeparture: CLLocationDegrees = latForDeparture
+            let longDeparture: CLLocationDegrees = lngForDeparture
+            let departureLocation = CLLocationCoordinate2D(latitude: latDeparture, longitude: longDeparture)
+            let departureLoc = CLLocation(latitude: latForArrival, longitude: longArrival)
+
+            let center = CLLocation.middlePointOfListMarkers(listCoords: [arrivalLocation, departureLocation])
+            let radius = Int(CLLocation.distance(from: arrivalLocation, to: departureLocation)) // arrivalLoc.distance(from: departureLoc)
+            print("center=\(center)")
+            print(radius)
+
+            group.enter()
+            Here.shared.getStationsNearby(center: center, radius: Int(radius), max: 50, time: departureDate.description, completion: { resp in
+                waypoints = resp
+                print("waypoints=\(waypoints)")
+                group.leave()
+            })
+
+            group.wait()
+            let line = waypoints[0].lines[0]
+            print(line)
 
             // TODO: This section relies on getting the fare prices from firebase and the line from the API first
-            let line = Line(name: lineName, agency: ag, destination: "De Anza", color: #colorLiteral(red: 0.2901960784, green: 0.5647058824, blue: 0.8862745098, alpha: 1), transitMode: TransitMode.bus)
-            let waypoints = [Station]()
             let price = 2.50
 
             return RouteSegment(distanceInMeters: distance, departureTime: departureDate, arrivalTime: arrivalDate, polyline: polyline, travelMode: .transit, line: line, price: price, waypoints: waypoints)
@@ -109,8 +138,20 @@ class GoogleMaps {
                 return nil
             }
             duration = Int(duration / 60)
-
             return RouteSegment(distanceInMeters: distance, durationInMinutes: duration, polyline: polyline, travelMode: .walking)
         }
+    }
+
+    func getHereStations(center: CLLocationCoordinate2D, radius: Int, max _: Int, time: String, completion: @escaping ([Station]) -> Void) {
+//        let group = DispatchGroup()
+        var stations = [Station]()
+//        group.enter()
+        Here.shared.getStationsNearby(center: center, radius: Int(radius), max: 50, time: time, completion: { resp in
+            stations = resp
+//            group.leave()
+        })
+//        group.notify(queue: .main) {
+        completion(stations)
+//        }
     }
 }

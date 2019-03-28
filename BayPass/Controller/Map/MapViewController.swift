@@ -22,6 +22,7 @@ class MapViewController: UIViewController {
     // Route Search properties
     var startIndex = 0
     var routes = [Route]()
+    var goog = GoogleMaps()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +31,9 @@ class MapViewController: UIViewController {
 
         setupViews()
         setupLocation()
+        goog.getRoutes(from: CLLocationCoordinate2D(latitude: 37.3345134, longitude: -121.9064766), to: CLLocationCoordinate2D(latitude: 37.353137, longitude: -121.9389346)) { resp in
+            print(resp)
+        }
     }
 
     func setupViews() {

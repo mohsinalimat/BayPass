@@ -34,7 +34,7 @@ class GoogleMapsTests: XCTestCase {
             result = $0
             expectation.fulfill()
         })
-        waitForExpectations(timeout: 5, handler: nil)
+//        waitForExpectations(timeout: 5, handler: nil)
         XCTAssertEqual(result.isEmpty, false)
     }
 

@@ -69,6 +69,7 @@
 		6A009196217EAF1A0087A32B /* ClipperCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A009195217EAF1A0087A32B /* ClipperCard.swift */; };
 		6A009198217EAF800087A32B /* Pass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A009197217EAF800087A32B /* Pass.swift */; };
 		6A00919A217EAFFE0087A32B /* Ticket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A009199217EAFFE0087A32B /* Ticket.swift */; };
+		6A059275224C73C0000D5FC5 /* CLLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A059274224C73C0000D5FC5 /* CLLocation.swift */; };
 		6A18FDBB2235AFB7002047B9 /* HereTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A18FDBA2235AFB7002047B9 /* HereTests.swift */; };
 		6A3F2CB621816B46006DA755 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3F2CB521816B46006DA755 /* Route.swift */; };
 		6A9261D62227663F009B61DF /* Here.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A9261D52227663F009B61DF /* Here.swift */; };
@@ -189,6 +190,7 @@
 		6A009195217EAF1A0087A32B /* ClipperCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipperCard.swift; sourceTree = "<group>"; };
 		6A009197217EAF800087A32B /* Pass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pass.swift; sourceTree = "<group>"; };
 		6A009199217EAFFE0087A32B /* Ticket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ticket.swift; sourceTree = "<group>"; };
+		6A059274224C73C0000D5FC5 /* CLLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLLocation.swift; sourceTree = "<group>"; };
 		6A0ED235217BFA4B003CD497 /* MapAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MapAnnotation.swift; path = BayPass/Model/Map/MapAnnotation.swift; sourceTree = SOURCE_ROOT; };
 		6A18FDBA2235AFB7002047B9 /* HereTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HereTests.swift; sourceTree = "<group>"; };
 		6A3F2CB521816B46006DA755 /* Route.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Route.swift; sourceTree = "<group>"; };
@@ -400,6 +402,7 @@
 				2227C3E9219C198A00053294 /* CAGradientLayer.swift */,
 				222A9275221A7DE900FD1367 /* GMPolyline.swift */,
 				226697E2223A2750005B82EC /* Notification.Name.swift */,
+				6A059274224C73C0000D5FC5 /* CLLocation.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -778,6 +781,7 @@
 				224662E72229031300E86C66 /* MVCSearchDelegate.swift in Sources */,
 				224662F5222B4BE600E86C66 /* UIViewController.swift in Sources */,
 				2235A97321B8F672009EDAC7 /* Credentials.swift in Sources */,
+				6A059275224C73C0000D5FC5 /* CLLocation.swift in Sources */,
 				2262C31221829BE3000586EE /* UIColor.swift in Sources */,
 				2262C31C2182A3D1000586EE /* MKPolyline.swift in Sources */,
 				6A009193217EAD820087A32B /* ScooterCompany.swift in Sources */,
@@ -1025,7 +1029,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 65QL794L6H;
 				INFOPLIST_FILE = BayPass/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1044,7 +1048,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 65QL794L6H;
 				INFOPLIST_FILE = BayPass/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
